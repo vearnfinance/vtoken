@@ -1,21 +1,21 @@
 # Documentation
 
-[iearn.finance](https://docs.iearn.finance)
+[vearn.finance](https://docs.vearn.finance)
 
 # Smart Contract Interface
 
 | Contract | ABI | Address |
 | -- | -- | -- |
-| iEther | [JSON](https://github.com/iearn-finance/itoken/blob/master/build/contracts/IEther.json) | [0x9Dde7cdd09dbed542fC422d18d89A589fA9fD4C0](https://etherscan.io/address/0x9dde7cdd09dbed542fc422d18d89a589fa9fd4c0#code) |
+| eEther | [JSON](https://github.com/vearn-finance/etoken/blob/master/build/contracts/EEther.json) | [0x9Dde7cdd09dbed542fC422d18d89A589fA9fD4C0](https://etherscan.io/address/0x9dde7cdd09dbed542fc422d18d89a589fa9fd4c0#code) |
 
-## iToken Interface
+## eToken Interface
 
 {% tabs %}
-{% tab title="IIEther.sol" %}
+{% tab title="EEEther.sol" %}
 ```javascript
 // Solidity Interface
 
-interface IIEther {
+interface EEEther {
   // Invest ETH
   function invest() external payable;
   function calcPoolValueInETH() external view returns (uint);
