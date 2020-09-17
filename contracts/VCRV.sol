@@ -329,7 +329,7 @@ interface ICurveFi {
   ) external;
 }
 
-contract yCRV is ERC20, ERC20Detailed, ReentrancyGuard, Ownable {
+contract vCRV is ERC20, ERC20Detailed, ReentrancyGuard, Ownable {
   using SafeERC20 for IERC20;
   using Address for address;
   using SafeMath for uint256;
@@ -341,7 +341,7 @@ contract yCRV is ERC20, ERC20Detailed, ReentrancyGuard, Ownable {
   address public curve;
   address public curveToken;
 
-  constructor () public ERC20Detailed("yCRV", "cDAI/cUSDC", 18) {
+  constructor () public ERC20Detailed("vCRV", "cDAI/cUSDC", 18) {
     token = address(0x6B175474E89094C44Da98b954EedeAC495271d0F);
     apr = address(0x318135fbD0b40D48fCEF431CCdF6C7926450edFB);
     cDAI = address(0x5d3a536E4D6DbD6114cc1Ead35777bAB948E3643);
