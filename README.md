@@ -6,16 +6,16 @@
 
 | Contract | ABI | Address |
 | -- | -- | -- |
-| eEther | [JSON](https://github.com/vearn-finance/etoken/blob/master/build/contracts/EEther.json) | [0x9Dde7cdd09dbed542fC422d18d89A589fA9fD4C0](https://etherscan.io/address/0x9dde7cdd09dbed542fc422d18d89a589fa9fd4c0#code) |
+| IEther | [JSON](https://github.com/VearnFinance/etoken/blob/master/build/contracts/IEther.json) | [0x9Dde7cdd09dbed542fC422d18d89A589fA9fD4C0](https://etherscan.io/address/0x9dde7cdd09dbed542fc422d18d89a589fa9fd4c0#code) |
 
 ## eToken Interface
 
 {% tabs %}
-{% tab title="EEEther.sol" %}
+{% tab title="IIEther.sol" %}
 ```javascript
 // Solidity Interface
 
-interface EEEther {
+interface IIEther {
   // Invest ETH
   function invest() external payable;
   function calcPoolValueInETH() external view returns (uint);
