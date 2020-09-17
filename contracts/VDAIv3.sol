@@ -365,7 +365,7 @@ interface LendingPoolAddressesProvider {
     function getLendingPoolCore() external view returns (address);
 }
 
-contract yDAI is ERC20, ERC20Detailed, ReentrancyGuard, Structs, Ownable {
+contract vDAI is ERC20, ERC20Detailed, ReentrancyGuard, Structs, Ownable {
   using SafeERC20 for IERC20;
   using Address for address;
   using SafeMath for uint256;
@@ -392,7 +392,7 @@ contract yDAI is ERC20, ERC20Detailed, ReentrancyGuard, Structs, Ownable {
 
   Lender public provider = Lender.NONE;
 
-  constructor () public ERC20Detailed("iearn DAI", "yDAI", 18) {
+  constructor () public ERC20Detailed("vearn DAI", "vDAI", 18) {
     token = address(0x6B175474E89094C44Da98b954EedeAC495271d0F);
     apr = address(0xdD6d648C991f7d47454354f4Ef326b04025a48A8);
     dydx = address(0x1E0447b19BB6EcFdAe1e4AE1694b0C3659614e4e);
