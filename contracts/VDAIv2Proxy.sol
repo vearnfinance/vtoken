@@ -168,24 +168,24 @@ library SafeERC20 {
     }
 }
 
-interface yERC20 {
+interface vERC20 {
   function deposit(uint256 _amount) external;
 }
 
-contract yDAIv2Proxy is ReentrancyGuard, Ownable {
+contract vDAIv2Proxy is ReentrancyGuard, Ownable {
   using SafeERC20 for IERC20;
   using Address for address;
   using SafeMath for uint256;
 
   address public DAI;
-  address public yDAI;
+  address public vDAI;
 
   // 1e18
   uint256 public fee;
 
   constructor () public {
       DAI = address(0x6B175474E89094C44Da98b954EedeAC495271d0F);
-      yDAI = address(0x16de59092dAE5CcF4A1E6439D611fd0653f0Bd01);
+      vDAI = address(0x16de59092dAE5CcF4A1E6439D611fd0653f0Bd01);
       fee = 1000000000000000;
 
       approveToken();
@@ -201,7 +201,7 @@ contract yDAIv2Proxy is ReentrancyGuard, Ownable {
   }
 
   function approveToken() public {
-      IERC20(DAI).safeApprove(yDAI, uint(-1));
+      IERC20(DAI).safeApprove(vDAI, uint(-1));
   }
 
   function deposit(uint256 _amount)
@@ -215,9 +215,9 @@ contract yDAIv2Proxy is ReentrancyGuard, Ownable {
         _fee = _amount.mul(fee).div(1e18);
       }
       uint256 amountSubFee = _amount.sub(_fee);
-      yERC20(yDAI).deposit(amountSubFee);
-      IERC20(yDAI).safeTransfer(msg.sender, IERC20(yDAI).balanceOf(address(this)));
-      require(IERC20(yDAI).balanceOf(address(this)) == 0, "yDAI remainder");
+      vERC20(vDAI).deposit(amountSubFee);
+      IERC20(vDAI).safeTransfer(msg.sender, IERC20(vDAI).balanceOf(address(this)));
+      require(IERC20(vDAI).balanceOf(address(this)) == 0, "vDAI remainder");
   }
 
   // incase of half-way error
