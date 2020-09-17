@@ -365,7 +365,7 @@ interface LendingPoolAddressesProvider {
     function getLendingPoolCore() external view returns (address);
 }
 
-contract ySUSD is ERC20, ERC20Detailed, ReentrancyGuard, Ownable, Structs {
+contract vSUSD is ERC20, ERC20Detailed, ReentrancyGuard, Ownable, Structs {
   using SafeERC20 for IERC20;
   using Address for address;
   using SafeMath for uint256;
@@ -390,7 +390,7 @@ contract ySUSD is ERC20, ERC20Detailed, ReentrancyGuard, Ownable, Structs {
 
   Lender public provider = Lender.NONE;
 
-  constructor () public ERC20Detailed("ySUSD", "ySUSD", 18) {
+  constructor () public ERC20Detailed("vSUSD", "vSUSD", 18) {
     token = address(0x57Ab1ec28D129707052df4dF418D58a2D46d5f51);
     apr = address(0x318135fbD0b40D48fCEF431CCdF6C7926450edFB);
     dydx = address(0x1E0447b19BB6EcFdAe1e4AE1694b0C3659614e4e);
