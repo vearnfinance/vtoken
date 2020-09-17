@@ -1,5 +1,5 @@
 
-interface IyCRV {
+interface IvCRV {
   function balanceCompound() external view returns (uint256);
   function supplyCompound(uint amount) external;
   function invest(uint256 _amount) external;
