@@ -1,6 +1,6 @@
 pragma solidity ^0.5.0;
 
-interface IyDAI {
+interface IvDAI {
 
   function recommend() external view returns (uint256);
 
