@@ -371,13 +371,13 @@ interface LendingPoolAddressesProvider {
 
 */
 
-interface yERC20 {
+interface vERC20 {
     function balanceOf(address account) external view returns (uint256);
     function redeem(uint256 _shares) external;
     function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
 }
 
-contract yUSDT is ERC20, ERC20Detailed, ReentrancyGuard, Ownable, Structs {
+contract vUSDT is ERC20, ERC20Detailed, ReentrancyGuard, Ownable, Structs {
   using SafeERC20 for IERC20;
   using Address for address;
   using SafeMath for uint256;
@@ -391,7 +391,7 @@ contract yUSDT is ERC20, ERC20Detailed, ReentrancyGuard, Ownable, Structs {
   address public dydx;
   uint256 public dToken;
   address public apr;
-  address public yUSDTv1;
+  address public vUSDTv1;
 
   enum Lender {
       NONE,
@@ -405,7 +405,7 @@ contract yUSDT is ERC20, ERC20Detailed, ReentrancyGuard, Ownable, Structs {
 
   Lender public provider = Lender.NONE;
 
-  constructor () public ERC20Detailed("yUSDT", "yUSDT", 6) {
+  constructor () public ERC20Detailed("vUSDT", "vUSDT", 6) {
     token = address(0xdAC17F958D2ee523a2206206994597C13D831ec7);
     apr = address(0x318135fbD0b40D48fCEF431CCdF6C7926450edFB);
     dydx = address(0x1E0447b19BB6EcFdAe1e4AE1694b0C3659614e4e);
@@ -713,14 +713,14 @@ contract yUSDT is ERC20, ERC20Detailed, ReentrancyGuard, Ownable, Structs {
   }
 
   function balanceOfV1(address _owner) public view returns (uint256) {
-    return yERC20(yUSDTv1).balanceOf(_owner);
+    return vERC20(vUSDTv1).balanceOf(_owner);
   }
 
   // Swap from USDTv1 to USDTv2
   function swap(uint256 _amount) external nonReentrant {
-    IERC20(yUSDTv1).safeTransferFrom(msg.sender, address(this), _amount);
-    uint256 b = IERC20(yUSDTv1).balanceOf(address(this));
-    yERC20(yUSDTv1).redeem(_amount);
+    IERC20(vUSDTv1).safeTransferFrom(msg.sender, address(this), _amount);
+    uint256 b = IERC20(vUSDTv1).balanceOf(address(this));
+    vERC20(vUSDTv1).redeem(_amount);
     uint256 newBalance = IERC20(yUSDTv1).balanceOf(address(this));
     uint256 invested = newBalance.sub(b);
     investFor(invested);
