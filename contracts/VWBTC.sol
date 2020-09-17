@@ -365,7 +365,7 @@ interface LendingPoolAddressesProvider {
     function getLendingPoolCore() external view returns (address);
 }
 
-contract yWBTC is ERC20, ERC20Detailed, ReentrancyGuard, Ownable, Structs {
+contract vWBTC is ERC20, ERC20Detailed, ReentrancyGuard, Ownable, Structs {
   using SafeERC20 for IERC20;
   using Address for address;
   using SafeMath for uint256;
@@ -390,7 +390,7 @@ contract yWBTC is ERC20, ERC20Detailed, ReentrancyGuard, Ownable, Structs {
 
   Lender public provider = Lender.NONE;
 
-  constructor () public ERC20Detailed("yBTC", "yBTC", 8) {
+  constructor () public ERC20Detailed("vBTC", "vBTC", 8) {
     token = address(0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599);
     apr = address(0x318135fbD0b40D48fCEF431CCdF6C7926450edFB);
     dydx = address(0x1E0447b19BB6EcFdAe1e4AE1694b0C3659614e4e);
