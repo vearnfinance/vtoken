@@ -512,7 +512,7 @@ contract vSNX is ERC20, ERC20Detailed, ReentrancyGuard, Ownable {
   }
 
   function withdraw(uint256 _amount) internal {
-    // _amount is amount of yCRV
+    // _amount is amount of vCRV
     // exchangeRateStored.div(1e18).mul(_amountOfCDai) = DAI
     uint256 dai = _amount.mul(getPricePerFullShare()).div(1e18);
     uint256 compoundDai = dai.mul(1e18).div(Compound(cDAI).exchangeRateStored());
