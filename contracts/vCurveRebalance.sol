@@ -127,14 +127,14 @@ library Address {
     }
 }
 
-interface yERC20 {
+interface vERC20 {
   function rebalance() external;
   function provider() external returns (uint8);
   function recommend() external returns (uint8);
   function balance() external view returns (uint256);
 }
 
-contract yTokenRebalance is ReentrancyGuard, Ownable {
+contract vTokenRebalance is ReentrancyGuard, Ownable {
   using Address for address;
   using SafeMath for uint256;
 
@@ -156,47 +156,47 @@ contract yTokenRebalance is ReentrancyGuard, Ownable {
     TUSDv2 = address(0x73a052500105205d34Daf004eAb301916DA8190f);
   }
   function balanceDAIv2() public view returns (uint256) {
-    return yERC20(DAIv2).balance();
+    return vERC20(DAIv2).balance();
   }
   function balanceDAIv3() public view returns (uint256) {
-    return yERC20(DAIv3).balance();
+    return vERC20(DAIv3).balance();
   }
   function balanceUSDCv2() public view returns (uint256) {
-    return yERC20(USDCv2).balance();
+    return vERC20(USDCv2).balance();
   }
   function balanceUSDCv3() public view returns (uint256) {
-    return yERC20(USDCv3).balance();
+    return vERC20(USDCv3).balance();
   }
   function balanceUSDTv2() public view returns (uint256) {
-    return yERC20(USDTv2).balance();
+    return vERC20(USDTv2).balance();
   }
   function balanceUSDTv3() public view returns (uint256) {
-    return yERC20(USDTv3).balance();
+    return vERC20(USDTv3).balance();
   }
   function balanceTUSDTv2() public view returns (uint256) {
-    return yERC20(TUSDv2).balance();
+    return vERC20(TUSDv2).balance();
   }
   function rebalance() public {
-      if (yERC20(DAIv2).provider() == yERC20(DAIv2).recommend()) {
-        yERC20(DAIv2).rebalance();
+      if (vERC20(DAIv2).provider() == vERC20(DAIv2).recommend()) {
+        vERC20(DAIv2).rebalance();
       }
-      if (yERC20(DAIv3).provider() == yERC20(DAIv3).recommend()) {
-        yERC20(DAIv3).rebalance();
+      if (vERC20(DAIv3).provider() == vERC20(DAIv3).recommend()) {
+        vERC20(DAIv3).rebalance();
       }
-      if (yERC20(USDCv2).provider() == yERC20(USDCv2).recommend()) {
-        yERC20(USDCv2).rebalance();
+      if (vERC20(USDCv2).provider() == vERC20(USDCv2).recommend()) {
+        vERC20(USDCv2).rebalance();
       }
-      if (yERC20(USDCv3).provider() == yERC20(USDCv3).recommend()) {
-        yERC20(USDCv3).rebalance();
+      if (vERC20(USDCv3).provider() == vERC20(USDCv3).recommend()) {
+        vERC20(USDCv3).rebalance();
       }
-      if (yERC20(USDTv2).provider() == yERC20(USDTv2).recommend()) {
-        yERC20(USDTv2).rebalance();
+      if (vERC20(USDTv2).provider() == vERC20(USDTv2).recommend()) {
+        vERC20(USDTv2).rebalance();
       }
-      if (yERC20(USDTv3).provider() == yERC20(USDTv3).recommend()) {
-        yERC20(USDTv3).rebalance();
+      if (vERC20(USDTv3).provider() == vERC20(USDTv3).recommend()) {
+        vERC20(USDTv3).rebalance();
       }
-      if (yERC20(TUSDv2).provider() == yERC20(TUSDv2).recommend()) {
-        yERC20(TUSDv2).rebalance();
+      if (vERC20(TUSDv2).provider() == yvERC20(TUSDv2).recommend()) {
+        vERC20(TUSDv2).rebalance();
       }
   }
 }
