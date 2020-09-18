@@ -168,7 +168,7 @@ library SafeERC20 {
     }
 }
 
-interface yERC20 {
+interface vERC20 {
 
   enum Lender {
       NONE,
@@ -195,19 +195,19 @@ interface ICurveFi {
   ) external;
 }
 
-contract yCurveBalances is ReentrancyGuard, Ownable {
+contract vCurveBalances is ReentrancyGuard, Ownable {
   using SafeERC20 for IERC20;
   using Address for address;
   using SafeMath for uint256;
 
   address public DAI;
-  address public yDAI;
+  address public vDAI;
   address public USDC;
-  address public yUSDC;
+  address public vUSDC;
   address public USDT;
-  address public yUSDT;
+  address public vUSDT;
   address public TUSD;
-  address public yTUSD;
+  address public vUSD;
 
   address public AAVE;
   address public DYDX;
@@ -216,16 +216,16 @@ contract yCurveBalances is ReentrancyGuard, Ownable {
 
   constructor () public {
     DAI = address(0x6B175474E89094C44Da98b954EedeAC495271d0F);
-    yDAI = address(0x16de59092dAE5CcF4A1E6439D611fd0653f0Bd01);
+    vDAI = address(0x16de59092dAE5CcF4A1E6439D611fd0653f0Bd01);
 
     USDC = address(0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48);
-    yUSDC = address(0xd6aD7a6750A7593E092a9B218d66C0A814a3436e);
+    vUSDC = address(0xd6aD7a6750A7593E092a9B218d66C0A814a3436e);
 
     USDT = address(0xdAC17F958D2ee523a2206206994597C13D831ec7);
-    yUSDT = address(0x83f798e925BcD4017Eb265844FDDAbb448f1707D);
+    vUSDT = address(0x83f798e925BcD4017Eb265844FDDAbb448f1707D);
 
     TUSD = address(0x0000000000085d4780B73119b644AE5ecd22b376);
-    yTUSD = address(0x73a052500105205d34Daf004eAb301916DA8190f);
+    vTUSD = address(0x73a052500105205d34Daf004eAb301916DA8190f);
 
     AAVE = address(0x3dfd23A6c5E8BbcFc9581d2E864a68feb6a076d3);
     DYDX = address(0x1E0447b19BB6EcFdAe1e4AE1694b0C3659614e4e);
@@ -239,7 +239,7 @@ contract yCurveBalances is ReentrancyGuard, Ownable {
   }
 
   function balanceOfDAI() external view returns (uint256) {
-    uint8 provider = yERC20(yDAI).provider();
+    uint8 provider = vERC20(vDAI).provider();
     if (provider == 2) {
       IERC20(DAI).balanceOf(cDAI);
     }
@@ -252,7 +252,7 @@ contract yCurveBalances is ReentrancyGuard, Ownable {
   }
 
   function balanceOfUSDT() external view returns (uint256) {
-    uint8 provider = yERC20(yUSDT).provider();
+    uint8 provider = vERC20(yUSDT).provider();
     if (provider == 3) {
       IERC20(USDT).balanceOf(AAVE);
     }
@@ -262,7 +262,7 @@ contract yCurveBalances is ReentrancyGuard, Ownable {
   }
 
   function balanceOfUSDC() external view returns (uint256) {
-    uint8 provider = yERC20(yUSDC).provider();
+    uint8 provider = vERC20(vUSDC).provider();
     if (provider == 2) {
       IERC20(USDC).balanceOf(cUSDC);
     }
@@ -275,7 +275,7 @@ contract yCurveBalances is ReentrancyGuard, Ownable {
   }
 
   function balanceOfTUSD() external view returns (uint256) {
-    uint8 provider = yERC20(yTUSD).provider();
+    uint8 provider = vERC20(vTUSD).provider();
     if (provider == 3) {
       IERC20(TUSD).balanceOf(AAVE);
     }
