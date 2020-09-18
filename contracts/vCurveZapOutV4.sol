@@ -168,7 +168,7 @@ library SafeERC20 {
     }
 }
 
-interface yERC20 {
+interface vERC20 {
   function withdraw(uint256 _amount) external;
 }
 
@@ -185,34 +185,34 @@ interface ICurveFi {
   ) external;
 }
 
-contract yCurveZapOutV4 is ReentrancyGuard, Ownable {
+contract vCurveZapOutV4 is ReentrancyGuard, Ownable {
   using SafeERC20 for IERC20;
   using Address for address;
   using SafeMath for uint256;
 
   address public DAI;
-  address public yDAI;
+  address public vDAI;
   address public USDC;
-  address public yUSDC;
+  address public vUSDC;
   address public USDT;
-  address public yUSDT;
+  address public vUSDT;
   address public BUSD;
-  address public yBUSD;
+  address public vBUSD;
   address public SWAP;
   address public CURVE;
 
   constructor () public {
     DAI = address(0x6B175474E89094C44Da98b954EedeAC495271d0F);
-    yDAI = address(0xC2cB1040220768554cf699b0d863A3cd4324ce32);
+    vDAI = address(0xC2cB1040220768554cf699b0d863A3cd4324ce32);
 
     USDC = address(0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48);
-    yUSDC = address(0x26EA744E5B887E5205727f55dFBE8685e3b21951);
+    vUSDC = address(0x26EA744E5B887E5205727f55dFBE8685e3b21951);
 
     USDT = address(0xdAC17F958D2ee523a2206206994597C13D831ec7);
-    yUSDT = address(0xE6354ed5bC4b393a5Aad09f21c46E101e692d447);
+    vUSDT = address(0xE6354ed5bC4b393a5Aad09f21c46E101e692d447);
 
     BUSD = address(0x4Fabb145d64652a948d72533023f6E7A623C7C53);
-    yBUSD = address(0x04bC0Ab673d88aE9dbC9DA2380cB6B79C4BCa9aE);
+    vBUSD = address(0x04bC0Ab673d88aE9dbC9DA2380cB6B79C4BCa9aE);
 
     SWAP = address(0x79a8C46DeA5aDa233ABaFFD40F3A0A2B1e5A4F27);
     CURVE = address(0x3B3Ac5386837Dc563660FB6a0937DFAa5924333B);
@@ -225,10 +225,10 @@ contract yCurveZapOutV4 is ReentrancyGuard, Ownable {
   }
 
   function approveToken() public {
-      IERC20(yDAI).safeApprove(SWAP, uint(-1));
-      IERC20(yUSDC).safeApprove(SWAP, uint(-1));
-      IERC20(yUSDT).safeApprove(SWAP, uint(-1));
-      IERC20(yBUSD).safeApprove(SWAP, uint(-1));
+      IERC20(vDAI).safeApprove(SWAP, uint(-1));
+      IERC20(vUSDC).safeApprove(SWAP, uint(-1));
+      IERC20(vUSDT).safeApprove(SWAP, uint(-1));
+      IERC20(vBUSD).safeApprove(SWAP, uint(-1));
   }
 
   function checkSlippage(uint256 _amount, address _token, uint256 _dec) public view returns (bool) {
@@ -253,28 +253,28 @@ contract yCurveZapOutV4 is ReentrancyGuard, Ownable {
   {
       withdrawCurve(_amount);
 
-      uint256 _ydai = IERC20(yDAI).balanceOf(address(this));
-      uint256 _yusdc = IERC20(yUSDC).balanceOf(address(this));
-      uint256 _yusdt = IERC20(yUSDT).balanceOf(address(this));
-      uint256 _ybusd = IERC20(yBUSD).balanceOf(address(this));
+      uint256 _vdai = IERC20(vDAI).balanceOf(address(this));
+      uint256 _vusdc = IERC20(vUSDC).balanceOf(address(this));
+      uint256 _vusdt = IERC20(vUSDT).balanceOf(address(this));
+      uint256 _vbusd = IERC20(vBUSD).balanceOf(address(this));
 
-      require(_ydai > 0 || _yusdc > 0 || _yusdt > 0 || _ybusd > 0, "no y.tokens found");
+      require(_vdai > 0 || _vusdc > 0 || _vusdt > 0 || _vbusd > 0, "no v.tokens found");
 
-      if (_yusdc > 0) {
-        ICurveFi(SWAP).exchange(1, 0, _yusdc, 0);
-        require(IERC20(yUSDC).balanceOf(address(this)) == 0, "y.USDC remainder");
+      if (_vusdc > 0) {
+        ICurveFi(SWAP).exchange(1, 0, _vusdc, 0);
+        require(IERC20(vUSDC).balanceOf(address(this)) == 0, "v.USDC remainder");
       }
-      if (_yusdt > 0) {
-        ICurveFi(SWAP).exchange(2, 0, _yusdt, 0);
-        require(IERC20(yUSDT).balanceOf(address(this)) == 0, "y.USDT remainder");
+      if (_vusdt > 0) {
+        ICurveFi(SWAP).exchange(2, 0, _vusdt, 0);
+        require(IERC20(vUSDT).balanceOf(address(this)) == 0, "v.USDT remainder");
       }
-      if (_ybusd > 0) {
-        ICurveFi(SWAP).exchange(3, 0, _ybusd, 0);
-        require(IERC20(yBUSD).balanceOf(address(this)) == 0, "y.BUSD remainder");
+      if (_vbusd > 0) {
+        ICurveFi(SWAP).exchange(3, 0, _vbusd, 0);
+        require(IERC20(vBUSD).balanceOf(address(this)) == 0, "v.BUSD remainder");
       }
 
-      yERC20(yDAI).withdraw(IERC20(yDAI).balanceOf(address(this)));
-      require(IERC20(yDAI).balanceOf(address(this)) == 0, "y.DAI remainder");
+      vERC20(vDAI).withdraw(IERC20(vDAI).balanceOf(address(this)));
+      require(IERC20(vDAI).balanceOf(address(this)) == 0, "v.DAI remainder");
 
       checkSlippage(_amount, DAI, 1);
 
@@ -288,28 +288,28 @@ contract yCurveZapOutV4 is ReentrancyGuard, Ownable {
   {
       withdrawCurve(_amount);
 
-      uint256 _ydai = IERC20(yDAI).balanceOf(address(this));
-      uint256 _yusdc = IERC20(yUSDC).balanceOf(address(this));
-      uint256 _yusdt = IERC20(yUSDT).balanceOf(address(this));
-      uint256 _ybusd = IERC20(yBUSD).balanceOf(address(this));
+      uint256 _vdai = IERC20(vDAI).balanceOf(address(this));
+      uint256 _vusdc = IERC20(vUSDC).balanceOf(address(this));
+      uint256 _vusdt = IERC20(vUSDT).balanceOf(address(this));
+      uint256 _vbusd = IERC20(vBUSD).balanceOf(address(this));
 
-      require(_ydai > 0 || _yusdc > 0 || _yusdt > 0 || _ybusd > 0, "no y.tokens found");
+      require(_vdai > 0 || _vusdc > 0 || _vusdt > 0 || _vbusd > 0, "no v.tokens found");
 
-      if (_ydai > 0) {
-        ICurveFi(SWAP).exchange(0, 1, _ydai, 0);
-        require(IERC20(yDAI).balanceOf(address(this)) == 0, "y.DAI remainder");
+      if (_vdai > 0) {
+        ICurveFi(SWAP).exchange(0, 1, _vdai, 0);
+        require(IERC20(vDAI).balanceOf(address(this)) == 0, "v.DAI remainder");
       }
-      if (_yusdt > 0) {
-        ICurveFi(SWAP).exchange(2, 1, _yusdt, 0);
-        require(IERC20(yUSDT).balanceOf(address(this)) == 0, "y.USDT remainder");
+      if (_vusdt > 0) {
+        ICurveFi(SWAP).exchange(2, 1, _vusdt, 0);
+        require(IERC20(vUSDT).balanceOf(address(this)) == 0, "v.USDT remainder");
       }
-      if (_ybusd > 0) {
-        ICurveFi(SWAP).exchange(3, 1, _ybusd, 0);
-        require(IERC20(yBUSD).balanceOf(address(this)) == 0, "y.BUSD remainder");
+      if (_vbusd > 0) {
+        ICurveFi(SWAP).exchange(3, 1, _vbusd, 0);
+        require(IERC20(vBUSD).balanceOf(address(this)) == 0, "v.BUSD remainder");
       }
 
-      yERC20(yUSDC).withdraw(IERC20(yUSDC).balanceOf(address(this)));
-      require(IERC20(yUSDC).balanceOf(address(this)) == 0, "y.USDC remainder");
+      vERC20(vUSDC).withdraw(IERC20(vUSDC).balanceOf(address(this)));
+      require(IERC20(vUSDC).balanceOf(address(this)) == 0, "v.USDC remainder");
 
       checkSlippage(_amount, USDC, 1e12);
 
@@ -323,28 +323,28 @@ contract yCurveZapOutV4 is ReentrancyGuard, Ownable {
   {
       withdrawCurve(_amount);
 
-      uint256 _ydai = IERC20(yDAI).balanceOf(address(this));
-      uint256 _yusdc = IERC20(yUSDC).balanceOf(address(this));
-      uint256 _yusdt = IERC20(yUSDT).balanceOf(address(this));
-      uint256 _ybusd = IERC20(yBUSD).balanceOf(address(this));
+      uint256 _vdai = IERC20(vDAI).balanceOf(address(this));
+      uint256 _vusdc = IERC20(vUSDC).balanceOf(address(this));
+      uint256 _vusdt = IERC20(vUSDT).balanceOf(address(this));
+      uint256 _vbusd = IERC20(vBUSD).balanceOf(address(this));
 
-      require(_ydai > 0 || _yusdc > 0 || _yusdt > 0 || _ybusd > 0, "no y.tokens found");
+      require(_vdai > 0 || _vusdc > 0 || _vusdt > 0 || _vbusd > 0, "no v.tokens found");
 
-      if (_ydai > 0) {
-        ICurveFi(SWAP).exchange(0, 2, _ydai, 0);
-        require(IERC20(yDAI).balanceOf(address(this)) == 0, "y.DAI remainder");
+      if (_vdai > 0) {
+        ICurveFi(SWAP).exchange(0, 2, _vdai, 0);
+        require(IERC20(vDAI).balanceOf(address(this)) == 0, "v.DAI remainder");
       }
-      if (_yusdc > 0) {
-        ICurveFi(SWAP).exchange(1, 2, _yusdc, 0);
-        require(IERC20(yUSDC).balanceOf(address(this)) == 0, "y.USDC remainder");
+      if (_vusdc > 0) {
+        ICurveFi(SWAP).exchange(1, 2, _vusdc, 0);
+        require(IERC20(vUSDC).balanceOf(address(this)) == 0, "v.USDC remainder");
       }
-      if (_ybusd > 0) {
-        ICurveFi(SWAP).exchange(3, 2, _ybusd, 0);
-        require(IERC20(yBUSD).balanceOf(address(this)) == 0, "y.BUSD remainder");
+      if (_vbusd > 0) {
+        ICurveFi(SWAP).exchange(3, 2, _vbusd, 0);
+        require(IERC20(vBUSD).balanceOf(address(this)) == 0, "v.BUSD remainder");
       }
 
-      yERC20(yUSDT).withdraw(IERC20(yUSDT).balanceOf(address(this)));
-      require(IERC20(yUSDT).balanceOf(address(this)) == 0, "y.USDT remainder");
+      vERC20(vUSDT).withdraw(IERC20(vUSDT).balanceOf(address(this)));
+      require(IERC20(vUSDT).balanceOf(address(this)) == 0, "v.USDT remainder");
 
       checkSlippage(_amount, USDT, 1e12);
 
@@ -358,28 +358,28 @@ contract yCurveZapOutV4 is ReentrancyGuard, Ownable {
   {
       withdrawCurve(_amount);
 
-      uint256 _ydai = IERC20(yDAI).balanceOf(address(this));
-      uint256 _yusdc = IERC20(yUSDC).balanceOf(address(this));
-      uint256 _yusdt = IERC20(yUSDT).balanceOf(address(this));
-      uint256 _ybusd = IERC20(yBUSD).balanceOf(address(this));
+      uint256 _vdai = IERC20(vDAI).balanceOf(address(this));
+      uint256 _vusdc = IERC20(vUSDC).balanceOf(address(this));
+      uint256 _vusdt = IERC20(vUSDT).balanceOf(address(this));
+      uint256 _vbusd = IERC20(vBUSD).balanceOf(address(this));
 
-      require(_ydai > 0 || _yusdc > 0 || _yusdt > 0 || _ybusd > 0, "no y.tokens found");
+      require(_vdai > 0 || _vusdc > 0 || _vusdt > 0 || _vbusd > 0, "no v.tokens found");
 
-      if (_ydai > 0) {
-        ICurveFi(SWAP).exchange(0, 3, _ydai, 0);
-        require(IERC20(yDAI).balanceOf(address(this)) == 0, "y.DAI remainder");
+      if (_vdai > 0) {
+        ICurveFi(SWAP).exchange(0, 3, _vdai, 0);
+        require(IERC20(vDAI).balanceOf(address(this)) == 0, "v.DAI remainder");
       }
-      if (_yusdc > 0) {
-        ICurveFi(SWAP).exchange(1, 3, _yusdc, 0);
-        require(IERC20(yUSDC).balanceOf(address(this)) == 0, "y.USDC remainder");
+      if (_vusdc > 0) {
+        ICurveFi(SWAP).exchange(1, 3, _vusdc, 0);
+        require(IERC20(vUSDC).balanceOf(address(this)) == 0, "v.USDC remainder");
       }
-      if (_yusdt > 0) {
-        ICurveFi(SWAP).exchange(2, 3, _yusdt, 0);
-        require(IERC20(yUSDT).balanceOf(address(this)) == 0, "y.USDT remainder");
+      if (_vusdt > 0) {
+        ICurveFi(SWAP).exchange(2, 3, _vusdt, 0);
+        require(IERC20(vUSDT).balanceOf(address(this)) == 0, "v.USDT remainder");
       }
 
-      yERC20(yBUSD).withdraw(IERC20(yBUSD).balanceOf(address(this)));
-      require(IERC20(yBUSD).balanceOf(address(this)) == 0, "y.BUSD remainder");
+      vERC20(vBUSD).withdraw(IERC20(vBUSD).balanceOf(address(this)));
+      require(IERC20(vBUSD).balanceOf(address(this)) == 0, "v.BUSD remainder");
 
       checkSlippage(_amount, BUSD, 1);
 
