@@ -168,7 +168,7 @@ library SafeERC20 {
     }
 }
 
-interface yERC20 {
+interface vERC20 {
   function withdraw(uint256 _amount) external;
 }
 
@@ -191,23 +191,23 @@ contract busdCurveGrantPool is ReentrancyGuard, Ownable {
   using SafeMath for uint256;
 
   address public DAI;
-  address public yDAI;
+  address public vDAI;
   address public USDC;
-  address public yUSDC;
+  address public vUSDC;
   address public USDT;
-  address public yUSDT;
+  address public vUSDT;
   address public SWAP;
   address public CURVE;
 
   constructor () public {
     DAI = address(0x6B175474E89094C44Da98b954EedeAC495271d0F);
-    yDAI = address(0xC2cB1040220768554cf699b0d863A3cd4324ce32);
+    vDAI = address(0xC2cB1040220768554cf699b0d863A3cd4324ce32);
 
     USDC = address(0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48);
-    yUSDC = address(0x26EA744E5B887E5205727f55dFBE8685e3b21951);
+    vUSDC = address(0x26EA744E5B887E5205727f55dFBE8685e3b21951);
 
     USDT = address(0xdAC17F958D2ee523a2206206994597C13D831ec7);
-    yUSDT = address(0xE6354ed5bC4b393a5Aad09f21c46E101e692d447);
+    vUSDT = address(0xE6354ed5bC4b393a5Aad09f21c46E101e692d447);
 
     SWAP = address(0x79a8C46DeA5aDa233ABaFFD40F3A0A2B1e5A4F27);
     CURVE = address(0x3B3Ac5386837Dc563660FB6a0937DFAa5924333B);
@@ -220,29 +220,29 @@ contract busdCurveGrantPool is ReentrancyGuard, Ownable {
   }
 
   function approveToken() public {
-      IERC20(yDAI).safeApprove(SWAP, uint(-1));
-      IERC20(yUSDC).safeApprove(SWAP, uint(-1));
-      IERC20(yUSDT).safeApprove(SWAP, uint(-1));
+      IERC20(vDAI).safeApprove(SWAP, uint(-1));
+      IERC20(vUSDC).safeApprove(SWAP, uint(-1));
+      IERC20(vUSDT).safeApprove(SWAP, uint(-1));
   }
 
   function donate(uint256 _amount) external nonReentrant onlyOwner {
     ICurveFi(SWAP).remove_liquidity(_amount, [uint256(0),0,0,0]);
 
-    uint256 _ydai = IERC20(yDAI).balanceOf(address(this));
-    uint256 _yusdc = IERC20(yUSDC).balanceOf(address(this));
-    uint256 _yusdt = IERC20(yUSDT).balanceOf(address(this));
+    uint256 _vdai = IERC20(vDAI).balanceOf(address(this));
+    uint256 _vusdc = IERC20(vUSDC).balanceOf(address(this));
+    uint256 _vusdt = IERC20(vUSDT).balanceOf(address(this));
 
-    if (_ydai > 0) {
-      yERC20(yDAI).withdraw(_ydai);
-      IERC20(DAI).safeTransfer(yDAI, IERC20(DAI).balanceOf(address(this)));
+    if (_vdai > 0) {
+      vERC20(vDAI).withdraw(_vdai);
+      IERC20(DAI).safeTransfer(vDAI, IERC20(DAI).balanceOf(address(this)));
     }
-    if (_yusdc > 0) {
-      yERC20(yUSDC).withdraw(_yusdc);
-      IERC20(USDC).safeTransfer(yUSDC, IERC20(USDC).balanceOf(address(this)));
+    if (_vusdc > 0) {
+      vERC20(vUSDC).withdraw(_vusdc);
+      IERC20(USDC).safeTransfer(vUSDC, IERC20(USDC).balanceOf(address(this)));
     }
-    if (_yusdt > 0) {
-      yERC20(yUSDT).withdraw(_yusdt);
-      IERC20(USDT).safeTransfer(yUSDT, IERC20(USDT).balanceOf(address(this)));
+    if (_vusdt > 0) {
+      vERC20(vUSDT).withdraw(_vusdt);
+      IERC20(USDT).safeTransfer(vUSDT, IERC20(USDT).balanceOf(address(this)));
     }
   }
 
