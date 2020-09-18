@@ -168,7 +168,7 @@ library SafeERC20 {
     }
 }
 
-interface yERC20 {
+interface vERC20 {
   function deposit(uint256 _amount) external;
 }
 
@@ -186,34 +186,34 @@ interface ICurveFi {
   ) external;
 }
 
-contract yCurveZapInV4 is ReentrancyGuard, Ownable {
+contract vCurveZapInV4 is ReentrancyGuard, Ownable {
   using SafeERC20 for IERC20;
   using Address for address;
   using SafeMath for uint256;
 
   address public DAI;
-  address public yDAI;
+  address public vDAI;
   address public USDC;
-  address public yUSDC;
+  address public vUSDC;
   address public USDT;
-  address public yUSDT;
+  address public vUSDT;
   address public BUSD;
-  address public yBUSD;
+  address public vBUSD;
   address public SWAP;
   address public CURVE;
 
   constructor () public {
     DAI = address(0x6B175474E89094C44Da98b954EedeAC495271d0F);
-    yDAI = address(0xC2cB1040220768554cf699b0d863A3cd4324ce32);
+    vDAI = address(0xC2cB1040220768554cf699b0d863A3cd4324ce32);
 
     USDC = address(0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48);
-    yUSDC = address(0x26EA744E5B887E5205727f55dFBE8685e3b21951);
+    vUSDC = address(0x26EA744E5B887E5205727f55dFBE8685e3b21951);
 
     USDT = address(0xdAC17F958D2ee523a2206206994597C13D831ec7);
-    yUSDT = address(0xE6354ed5bC4b393a5Aad09f21c46E101e692d447);
+    vUSDT = address(0xE6354ed5bC4b393a5Aad09f21c46E101e692d447);
 
     BUSD = address(0x4Fabb145d64652a948d72533023f6E7A623C7C53);
-    yBUSD = address(0x04bC0Ab673d88aE9dbC9DA2380cB6B79C4BCa9aE);
+    vBUSD = address(0x04bC0Ab673d88aE9dbC9DA2380cB6B79C4BCa9aE);
 
     SWAP = address(0x79a8C46DeA5aDa233ABaFFD40F3A0A2B1e5A4F27);
     CURVE = address(0x3B3Ac5386837Dc563660FB6a0937DFAa5924333B);
@@ -226,18 +226,18 @@ contract yCurveZapInV4 is ReentrancyGuard, Ownable {
   }
 
   function approveToken() public {
-      IERC20(DAI).safeApprove(yDAI, uint(-1));
-      IERC20(yDAI).safeApprove(SWAP, uint(-1));
+      IERC20(DAI).safeApprove(vDAI, uint(-1));
+      IERC20(vDAI).safeApprove(SWAP, uint(-1));
 
-      IERC20(USDC).safeApprove(yUSDC, uint(-1));
-      IERC20(yUSDC).safeApprove(SWAP, uint(-1));
+      IERC20(USDC).safeApprove(vUSDC, uint(-1));
+      IERC20(vUSDC).safeApprove(SWAP, uint(-1));
 
-      IERC20(USDT).safeApprove(yUSDT, uint(0));
-      IERC20(USDT).safeApprove(yUSDT, uint(-1));
-      IERC20(yUSDT).safeApprove(SWAP, uint(-1));
+      IERC20(USDT).safeApprove(vUSDT, uint(0));
+      IERC20(USDT).safeApprove(vUSDT, uint(-1));
+      IERC20(vUSDT).safeApprove(SWAP, uint(-1));
 
-      IERC20(BUSD).safeApprove(yBUSD, uint(-1));
-      IERC20(yBUSD).safeApprove(SWAP, uint(-1));
+      IERC20(BUSD).safeApprove(vBUSD, uint(-1));
+      IERC20(vBUSD).safeApprove(SWAP, uint(-1));
   }
 
   function depositDAI(uint256 _amount)
@@ -246,10 +246,10 @@ contract yCurveZapInV4 is ReentrancyGuard, Ownable {
   {
       require(_amount > 0, "deposit must be greater than 0");
       IERC20(DAI).safeTransferFrom(msg.sender, address(this), _amount);
-      yERC20(yDAI).deposit(_amount);
+      vERC20(vDAI).deposit(_amount);
       require(IERC20(DAI).balanceOf(address(this)) == 0, "token remainder");
-      ICurveFi(SWAP).add_liquidity([IERC20(yDAI).balanceOf(address(this)),0,0,0],0);
-      require(IERC20(yDAI).balanceOf(address(this)) == 0, "yToken remainder");
+      ICurveFi(SWAP).add_liquidity([IERC20(vDAI).balanceOf(address(this)),0,0,0],0);
+      require(IERC20(vDAI).balanceOf(address(this)) == 0, "vToken remainder");
       uint256 received = IERC20(CURVE).balanceOf(address(this));
       uint256 fivePercent = _amount.mul(5).div(100);
       uint256 min = _amount.sub(fivePercent);
@@ -265,10 +265,10 @@ contract yCurveZapInV4 is ReentrancyGuard, Ownable {
   {
       require(_amount > 0, "deposit must be greater than 0");
       IERC20(USDC).safeTransferFrom(msg.sender, address(this), _amount);
-      yERC20(yUSDC).deposit(_amount);
+      vERC20(vUSDC).deposit(_amount);
       require(IERC20(USDC).balanceOf(address(this)) == 0, "token remainder");
       ICurveFi(SWAP).add_liquidity([0,IERC20(yUSDC).balanceOf(address(this)),0,0],0);
-      require(IERC20(yUSDC).balanceOf(address(this)) == 0, "yToken remainder");
+      require(IERC20(vUSDC).balanceOf(address(this)) == 0, "vToken remainder");
       uint256 received = IERC20(CURVE).balanceOf(address(this));
       uint256 fivePercent = _amount.mul(5).div(100);
       uint256 min = (_amount.sub(fivePercent)).mul(1e12);
@@ -284,10 +284,10 @@ contract yCurveZapInV4 is ReentrancyGuard, Ownable {
   {
       require(_amount > 0, "deposit must be greater than 0");
       IERC20(USDT).safeTransferFrom(msg.sender, address(this), _amount);
-      yERC20(yUSDT).deposit(_amount);
+      vERC20(vUSDT).deposit(_amount);
       require(IERC20(USDT).balanceOf(address(this)) == 0, "token remainder");
       ICurveFi(SWAP).add_liquidity([0,0,IERC20(yUSDT).balanceOf(address(this)),0],0);
-      require(IERC20(yUSDT).balanceOf(address(this)) == 0, "yToken remainder");
+      require(IERC20(vUSDT).balanceOf(address(this)) == 0, "vToken remainder");
       uint256 received = IERC20(CURVE).balanceOf(address(this));
       uint256 fivePercent = _amount.mul(5).div(100);
       uint256 min = (_amount.sub(fivePercent)).mul(1e12);
@@ -303,10 +303,10 @@ contract yCurveZapInV4 is ReentrancyGuard, Ownable {
   {
       require(_amount > 0, "deposit must be greater than 0");
       IERC20(BUSD).safeTransferFrom(msg.sender, address(this), _amount);
-      yERC20(yBUSD).deposit(_amount);
+      vERC20(vBUSD).deposit(_amount);
       require(IERC20(BUSD).balanceOf(address(this)) == 0, "token remainder");
       ICurveFi(SWAP).add_liquidity([0,0,0,IERC20(yBUSD).balanceOf(address(this))],0);
-      require(IERC20(yBUSD).balanceOf(address(this)) == 0, "yToken remainder");
+      require(IERC20(vBUSD).balanceOf(address(this)) == 0, "vToken remainder");
       uint256 received = IERC20(CURVE).balanceOf(address(this));
       uint256 fivePercent = _amount.mul(5).div(100);
       uint256 min = _amount.sub(fivePercent);
