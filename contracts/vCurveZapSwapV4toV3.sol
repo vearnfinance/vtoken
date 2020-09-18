@@ -168,7 +168,7 @@ library SafeERC20 {
     }
 }
 
-interface yERC20 {
+interface vERC20 {
   function deposit(uint256 _amount) external;
   function withdraw(uint256 _amount) external;
 }
@@ -210,23 +210,23 @@ interface ICurveFiv4 {
   ) external;
 }
 
-contract yCurveZapSwapV4toV3 is ReentrancyGuard, Ownable {
+contract vCurveZapSwapV4toV3 is ReentrancyGuard, Ownable {
   using SafeERC20 for IERC20;
   using Address for address;
   using SafeMath for uint256;
 
   address public DAI;
-  address public yDAIv2;
-  address public yDAIv3;
+  address public vDAIv2;
+  address public vDAIv3;
   address public USDC;
-  address public yUSDCv2;
-  address public yUSDCv3;
+  address public vUSDCv2;
+  address public vUSDCv3;
   address public USDT;
-  address public yUSDTv2;
-  address public yUSDTv3;
+  address public vUSDTv2;
+  address public vUSDTv3;
   address public TUSD;
-  address public yTUSDv2;
-  address public yBUSDv3;
+  address public vTUSDv2;
+  address public vBUSDv3;
   address public BUSD;
   address public SWAPv3;
   address public CURVEv3;
@@ -235,22 +235,22 @@ contract yCurveZapSwapV4toV3 is ReentrancyGuard, Ownable {
 
   constructor () public {
     DAI = address(0x6B175474E89094C44Da98b954EedeAC495271d0F);
-    yDAIv2 = address(0x16de59092dAE5CcF4A1E6439D611fd0653f0Bd01);
-    yDAIv3 = address(0xC2cB1040220768554cf699b0d863A3cd4324ce32);
+    vDAIv2 = address(0x16de59092dAE5CcF4A1E6439D611fd0653f0Bd01);
+    vDAIv3 = address(0xC2cB1040220768554cf699b0d863A3cd4324ce32);
 
     TUSD = address(0x0000000000085d4780B73119b644AE5ecd22b376);
-    yTUSDv2 = address(0x73a052500105205d34Daf004eAb301916DA8190f);
+    vTUSDv2 = address(0x73a052500105205d34Daf004eAb301916DA8190f);
 
     USDC = address(0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48);
-    yUSDCv2 = address(0xd6aD7a6750A7593E092a9B218d66C0A814a3436e);
-    yUSDCv3 = address(0x26EA744E5B887E5205727f55dFBE8685e3b21951);
+    vUSDCv2 = address(0xd6aD7a6750A7593E092a9B218d66C0A814a3436e);
+    vUSDCv3 = address(0x26EA744E5B887E5205727f55dFBE8685e3b21951);
 
     BUSD = address(0x4Fabb145d64652a948d72533023f6E7A623C7C53);
-    yBUSDv3 = address(0x04bC0Ab673d88aE9dbC9DA2380cB6B79C4BCa9aE);
+    vBUSDv3 = address(0x04bC0Ab673d88aE9dbC9DA2380cB6B79C4BCa9aE);
 
     USDT = address(0xdAC17F958D2ee523a2206206994597C13D831ec7);
-    yUSDTv2 = address(0x83f798e925BcD4017Eb265844FDDAbb448f1707D);
-    yUSDTv3 = address(0xE6354ed5bC4b393a5Aad09f21c46E101e692d447);
+    vUSDTv2 = address(0x83f798e925BcD4017Eb265844FDDAbb448f1707D);
+    vUSDTv3 = address(0xE6354ed5bC4b393a5Aad09f21c46E101e692d447);
 
     SWAPv3 = address(0x45F783CCE6B7FF23B2ab2D70e416cdb7D6055f51);
     CURVEv3 = address(0xdF5e0e81Dff6FAF3A7e52BA697820c5e32D806A8);
@@ -270,22 +270,22 @@ contract yCurveZapSwapV4toV3 is ReentrancyGuard, Ownable {
   }
 
   function approveToken() public {
-      IERC20(DAI).safeApprove(yDAIv2, uint(-1));
-      IERC20(DAI).safeApprove(yDAIv3, uint(-1));
-      IERC20(yDAIv2).safeApprove(SWAPv3, uint(-1));
-      IERC20(yDAIv3).safeApprove(SWAPv4, uint(-1));
+      IERC20(DAI).safeApprove(vDAIv2, uint(-1));
+      IERC20(DAI).safeApprove(vDAIv3, uint(-1));
+      IERC20(vDAIv2).safeApprove(SWAPv3, uint(-1));
+      IERC20(vDAIv3).safeApprove(SWAPv4, uint(-1));
 
-      IERC20(USDC).safeApprove(yUSDCv2, uint(-1));
-      IERC20(USDC).safeApprove(yUSDCv3, uint(-1));
-      IERC20(yUSDCv2).safeApprove(SWAPv3, uint(-1));
-      IERC20(yUSDCv3).safeApprove(SWAPv4, uint(-1));
+      IERC20(USDC).safeApprove(vUSDCv2, uint(-1));
+      IERC20(USDC).safeApprove(vUSDCv3, uint(-1));
+      IERC20(vUSDCv2).safeApprove(SWAPv3, uint(-1));
+      IERC20(vUSDCv3).safeApprove(SWAPv4, uint(-1));
 
-      IERC20(USDT).safeApprove(yUSDTv2, uint(0));
-      IERC20(USDT).safeApprove(yUSDTv2, uint(-1));
-      IERC20(USDT).safeApprove(yUSDTv3, uint(0));
-      IERC20(USDT).safeApprove(yUSDTv3, uint(-1));
-      IERC20(yUSDTv2).safeApprove(SWAPv3, uint(-1));
-      IERC20(yUSDTv3).safeApprove(SWAPv4, uint(-1));
+      IERC20(USDT).safeApprove(vUSDTv2, uint(0));
+      IERC20(USDT).safeApprove(vUSDTv2, uint(-1));
+      IERC20(USDT).safeApprove(vUSDTv3, uint(0));
+      IERC20(USDT).safeApprove(vUSDTv3, uint(-1));
+      IERC20(vUSDTv2).safeApprove(SWAPv3, uint(-1));
+      IERC20(vUSDTv3).safeApprove(SWAPv4, uint(-1));
 
   }
 
@@ -298,17 +298,17 @@ contract yCurveZapSwapV4toV3 is ReentrancyGuard, Ownable {
       ICurveFiv3(SWAPv4).remove_liquidity(_amount, [uint256(0),0,0,0]);
       require(IERC20(CURVEv4).balanceOf(address(this)) == 0, "CURVEv4 remainder");
 
-      if (IERC20(yDAIv3).balanceOf(address(this)) > 0) {
-        yERC20(yDAIv3).withdraw(IERC20(yDAIv3).balanceOf(address(this)));
+      if (IERC20(vDAIv3).balanceOf(address(this)) > 0) {
+        vERC20(vDAIv3).withdraw(IERC20(vDAIv3).balanceOf(address(this)));
       }
-      if (IERC20(yUSDCv3).balanceOf(address(this)) > 0) {
-        yERC20(yUSDCv3).withdraw(IERC20(yUSDCv3).balanceOf(address(this)));
+      if (IERC20(vUSDCv3).balanceOf(address(this)) > 0) {
+        vERC20(vUSDCv3).withdraw(IERC20(vUSDCv3).balanceOf(address(this)));
       }
-      if (IERC20(yUSDTv3).balanceOf(address(this)) > 0) {
-        yERC20(yUSDTv3).withdraw(IERC20(yUSDTv3).balanceOf(address(this)));
+      if (IERC20(vUSDTv3).balanceOf(address(this)) > 0) {
+        vERC20(vUSDTv3).withdraw(IERC20(vUSDTv3).balanceOf(address(this)));
       }
-      if (IERC20(yBUSDv3).balanceOf(address(this)) > 0) {
-        yERC20(yBUSDv3).withdraw(IERC20(yBUSDv3).balanceOf(address(this)));
+      if (IERC20(vBUSDv3).balanceOf(address(this)) > 0) {
+        vERC20(vBUSDv3).withdraw(IERC20(vBUSDv3).balanceOf(address(this)));
       }
 
       uint256 _dai = IERC20(DAI).balanceOf(address(this));
@@ -318,30 +318,30 @@ contract yCurveZapSwapV4toV3 is ReentrancyGuard, Ownable {
       require(_dai > 0 || _usdc > 0 || _usdt > 0, "no underlying found");
 
       if (_dai > 0) {
-        yERC20(yDAIv2).deposit(_dai);
+        vERC20(vDAIv2).deposit(_dai);
         require(IERC20(DAI).balanceOf(address(this)) == 0, "dai remainder");
       }
 
       if (_usdc > 0) {
-        yERC20(yUSDCv2).deposit(_usdc);
+        vERC20(vUSDCv2).deposit(_usdc);
         require(IERC20(USDC).balanceOf(address(this)) == 0, "usdc remainder");
       }
 
       if (_usdt > 0) {
-        yERC20(yUSDTv2).deposit(_usdt);
+        vERC20(vUSDTv2).deposit(_usdt);
         require(IERC20(USDT).balanceOf(address(this)) == 0, "usdc remainder");
       }
 
 
       ICurveFiv4(SWAPv3).add_liquidity([
-        IERC20(yDAIv2).balanceOf(address(this)),
-        IERC20(yUSDCv2).balanceOf(address(this)),
-        IERC20(yUSDTv2).balanceOf(address(this)),
+        IERC20(vDAIv2).balanceOf(address(this)),
+        IERC20(vUSDCv2).balanceOf(address(this)),
+        IERC20(vUSDTv2).balanceOf(address(this)),
         0],0);
 
-      require(IERC20(yDAIv2).balanceOf(address(this)) == 0, "yDAIv2 remainder");
-      require(IERC20(yUSDCv2).balanceOf(address(this)) == 0, "yUSDCv2 remainder");
-      require(IERC20(yUSDTv2).balanceOf(address(this)) == 0, "yUSDTv2 remainder");
+      require(IERC20(vDAIv2).balanceOf(address(this)) == 0, "vDAIv2 remainder");
+      require(IERC20(vUSDCv2).balanceOf(address(this)) == 0, "vUSDCv2 remainder");
+      require(IERC20(vUSDTv2).balanceOf(address(this)) == 0, "vUSDTv2 remainder");
 
       IERC20(BUSD).safeTransfer(msg.sender, IERC20(BUSD).balanceOf(address(this)));
       require(IERC20(BUSD).balanceOf(address(this)) == 0, "BUSD remainder");
