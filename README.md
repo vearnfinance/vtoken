@@ -8,7 +8,7 @@
 | -- | -- | -- |
 | IEther | [JSON](https://github.com/VearnFinance/etoken/blob/master/build/contracts/IEther.json) | [0x9Dde7cdd09dbed542fC422d18d89A589fA9fD4C0](https://etherscan.io/address/0x9dde7cdd09dbed542fc422d18d89a589fa9fd4c0#code) |
 
-## eToken Interface
+## vToken Interface
 
 {% tabs %}
 {% tab title="IIEther.sol" %}
